@@ -1,9 +1,5 @@
 # Photo Aws Serveless Rest API
 
-!GitHub
-!GitHub last commit
-!GitHub issues
-!GitHub stars
 
 ## Introduction
 The **PhotoAwsServelessRestAPI** project is a RESTful API built using Java and Spring Boot. It provides endpoints for managing photo-related data, such as uploading, retrieving, and deleting photos. The API is designed to be simple, efficient, and easy to use.
