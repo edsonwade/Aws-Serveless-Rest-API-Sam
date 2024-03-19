@@ -22,3 +22,9 @@ A
 samconfig.toml,1\0\103b5805b05d10eb9576f108b4aa49bf96baece2
 =
 template.yaml,a\5\a59ab7db7e728017a7f55483d5aa97d97a4f9a87
+R
+"src/main/resources/apllication.yml,c\8\c805cfba3c022eb7c32678eced9e3dc9b53c84ac
+E
+build-aws-locally.txt,9\d\9d5e9ab5f4b30449f289a58acec50795c5228594
+C
+.aws-sam/build.toml,3\f\3ff232c03129640ab41fcd03dd23bfece06234dd
