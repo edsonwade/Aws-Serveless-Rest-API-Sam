@@ -2,4 +2,7 @@
 2-sam local invoke PostHandlerFunction --event events/event.json
 --mandatory docker needs to be installed otherwise will not run.
 
+--debug lambda local
+3-sam local invoke PostHandlerFunction --event events/event.json -d 5858
+
 -- the template and events need to be outside the package projects
