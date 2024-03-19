@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'aws-serverless-rest-api-sam
+
+  Sample SAM Template for aws-serverless-rest-api-sam
+
+  '
+Globals:
+  Function:
+    Timeout: 20
+    Runtime: java11
+    Architectures:
+    - x86_64
+    MemorySize: 512
+    LoggingConfig:
+      LogFormat: JSON
+Resources:
+  PostHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PostHandlerFunction
+      Handler: code.with.vanilson.PostHandler::handleRequest
+      Environment:
+        Variables:
+          PARAM1: VALUE
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+      Events:
+        PhotoAppUsers:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+    Metadata:
+      SamResourceId: PostHandlerFunction
+Outputs:
+  PhotoRestAPI:
+    Description: API endpoint to create new user
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  PostHandlerFunction:
+    Description: PostHandlerFunction ARN value
+    Value:
+      Fn::GetAtt:
+      - PostHandlerFunction
+      - Arn
+  PostHandlerFunctionIamRole:
+    Description: Implicit IAM Role created for PostHandlerFunction
+    Value:
+      Fn::GetAtt:
+      - PostHandlerFunctionRole
+      - Arn
