@@ -1,0 +1,5 @@
+1-sam build
+2-sam local invoke PostHandlerFunction --event events/event.json
+--mandatory docker needs to be installed otherwise will not run.
+
+-- the template and events need to be outside the package projects
