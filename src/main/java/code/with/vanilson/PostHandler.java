@@ -6,43 +6,45 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.google.gson.Gson;
 
 /**
  * Handler for requests to Lambda function.
  */
 public class PostHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
+    public static final String USER_ID = "userId";
+
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        headers.put("X-Custom-Header", "application/json");
+        String requestBody = input.getBody();
+        Gson gson = new Gson();
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
-                .withHeaders(headers);
-        try {
-            final String pageContents = this.getPageContents("https://checkip.amazonaws.com");
-            String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
+        Map<String, String> userDetails = gson.fromJson(requestBody, Map.class);
+        userDetails.put(USER_ID, UUID.randomUUID().toString());
+        //todo: Process user details
 
-            return response
-                    .withStatusCode(200)
-                    .withBody(output);
-        } catch (IOException e) {
-            return response
-                    .withBody("{}")
-                    .withStatusCode(500);
-        }
+        //noinspection MismatchedQueryAndUpdateOfCollection
+        Map<String, String> stringMap = new HashMap<>();
+        stringMap.put("firstName", userDetails.get("firstName"));
+        stringMap.put("lastName", userDetails.get("lastName"));
+        stringMap.put(USER_ID, userDetails.get(USER_ID));
+
+        var response = new APIGatewayProxyResponseEvent();
+        response.withStatusCode(200);
+        response.withBody(gson.toJson(stringMap, Map.class));
+
+        Map<String, String> responseHeaders = new HashMap<>();
+        responseHeaders.put("Content-Type", "application/json");
+        response.withHeaders(responseHeaders);
+
+        return response;
     }
 
-    private String getPageContents(String address) throws IOException {
-        URL url = new URL(address);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
-            return br.lines().collect(Collectors.joining(System.lineSeparator()));
-        }
-    }
 }
